@@ -10,22 +10,23 @@ class ACF_API_Fields_Field_Relationship extends acf_field {
 		}
 	}
 
+	public static $_endpoints = array();
+
 	public function __construct() {
 		$this->name = 'api_relationship';
 		$this->label = __( 'API Relationship', 'acf-wp-rest-api-fields' );
 		$this->category = 'API';
 
 		$this->defaults = array(
-		    'api_endpoint_url' => '',
-		    'api_endpoint_type' => 'post',
-		    'api_title_field' => 'title',
-		    'api_id_field' => 'id',
+		    'api_endpoints' => '',
+		    'api_endpoint_type' => 'post',//Not currently used
+		    'api_title_field' => 'title',//Not currently used
+		    'api_id_field' => 'id',//Not current used
 		    'return_format' => 'object',
-		    'post_type' => array(),
 		    'taxonomy' => array(),
 		    'min' => '',
 		    'max' => '',
-		    'filters' => array('search'),
+		    'filters' => array('search', 'endpoints'),
 		    'elements' => array(),
 		    'multiple' => true,
 		);
@@ -37,19 +38,36 @@ class ACF_API_Fields_Field_Relationship extends acf_field {
 		wp_enqueue_script( 'acf-field-api-relationship', ACF_API_Fields()->plugin_url() . '/js/field-api-relationship.js', array('jquery', 'acf-input'), ACF_API_Fields()->assets_version() );
 	}
 
-	function render_field_settings( $field ) {
+	public function input_admin_l10n( $l10n ) {
+		parent::input_admin_l10n( $l10n );
+	}
 
+	public function load_field( $field ) {
+		if ( empty( $this->l10n ) ) {
+			$this->l10n['fields'] = array();
+		}
+
+		$field['api_endpoints'] = acf_get_array( $field['api_endpoints'] );
+
+		$this->l10n['fields'][$field['key']] = $field['api_endpoints'];
+		return $field;
+	}
+
+	public function render_field_settings( $field ) {
+
+		$field['api_endpoints'] = acf_encode_choices( $field['api_endpoints'] );
+
+		// choices
 		acf_render_field_setting( $field, array(
-		    'label' => __( 'End Point URL', 'acf-wp-rest-api-fields' ),
-		    'instructions' => __( 'The API Endpoint URL', 'acf-wp-rest-api-fields' ),
-		    'type' => 'url',
-		    'name' => 'api_endpoint_url',
-		    'append' => '/',
+		    'label' => __( 'Endpoints', 'acf' ),
+		    'instructions' => __( 'Enter each endpoint on a new line.', 'acf-wp-rest-api-fields' ) . '<br /><br />' . __( 'Specify both a name and url like this:', 'acf-wp-rest-api-fields' ) . '<br /><br />' . __( 'Name : URL', 'acf-wp-rest-api-fields' ),
+		    'type' => 'textarea',
+		    'name' => 'api_endpoints',
 		) );
 	}
 
 	public function render_field( $field ) {
-		
+
 		$atts = array(
 		    'id' => $field['id'],
 		    'class' => "acf-relationship {$field['class']}",
@@ -59,8 +77,17 @@ class ACF_API_Fields_Field_Relationship extends acf_field {
 		    'data-post_type' => '',
 		    'data-taxonomy' => '',
 		    'data-paged' => 1,
-		    'data-api' => $field['api_endpoint_url']
+		    'data-endpoint' => '',
 		);
+
+
+		$field['filters'] = array();
+		$field['filters'][] = 'search';
+		if ( !empty( $field['api_endpoints'] ) && count( $field['api_endpoints'] ) > 1 ) {
+			$field['filters'][] = 'endpoints';
+		}
+		
+		$atts['data-endpoint'] = array_values( $field['api_endpoints'] )[0];
 
 		include ACF_API_Fields()->plugin_dir() . '/templates/relationship.php';
 	}
@@ -83,9 +110,9 @@ class ACF_API_Fields_Field_Relationship extends acf_field {
 		if ( $field['return_format'] == 'object' ) {
 			$value = ACF_API_Fields()->api->get_posts( $field, array(
 			    'include' => $value
-			) );
+				) );
 		}
-		
+
 		// convert back from array if neccessary
 		if ( !$field['multiple'] ) {
 			$value = array_shift( $value );
@@ -93,6 +120,11 @@ class ACF_API_Fields_Field_Relationship extends acf_field {
 
 		// return value
 		return $value;
+	}
+
+	public function update_field( $field ) {
+		$field['api_endpoints'] = acf_decode_choices( $field['api_endpoints'] );
+		return $field;
 	}
 
 }
