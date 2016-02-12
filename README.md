@@ -1,69 +1,41 @@
-# ACF Field Type Template
+# ACF API Relationship Field
 
-Welcome to the Advanced Custom Fields field type template repository.
-Here you will find a starter-kit for creating a new ACF field type. This start-kit will work as a normal WP plugin.
-
-For more information about creating a new field type, please read the following article:
-http://www.advancedcustomfields.com/resources/tutorials/creating-a-new-field-type/
-
-### Structure
-
-* `/css`:  folder for .css files.
-* `/images`: folder for image files
-* `/js`: folder for .js files
-* `/lang`: folder for .pot, .po and .mo files
-* `acf-FIELD_NAME.php`: Main plugin file that includes the correct field file based on the ACF version
-* `FIELD_NAME-v5.php`: Field class compatible with ACF version 5 
-* `FIELD_NAME-v4.php`: Field class compatible with ACF version 4
-* `readme.txt`: WordPress readme file to be used by the WordPress repository
-
-### step 1.
-
-This template uses `PLACEHOLDERS` such as `FIELD_NAME` throughout the file names and code. Use the following list of placeholders to do a 'find and replace':
-
-* `FIELD_NAME`: Single word, no spaces. Underscores allowed. eg. donate_button
-* `FIELD_LABEL`: Multiple words, can include spaces, visible when selecting a field type. eg. Donate Button
-* `PLUGIN_URL`: Url to the github or WordPress repository
-* `PLUGIN_TAGS`: Comma separated list of relevant tags
-* `SHORT_DESCRIPTION`: Brief description of the field type, no longer than 2 lines
-* `EXTENDED_DESCRIPTION`: Extended description of the field type
-* `AUTHOR_NAME`: Name of field type author
-* `AUTHOR_URL`: URL to author's website
-
-### step 2.
-
-Edit the `FIELD_NAME-v5.php` and `FIELD_NAME-v4.php` files (now renamed using your field name) and include your custom code in the appropriate functions. 
-Please note that v4 and v5 field classes have slightly different functions. For more information, please read:
-* http://www.advancedcustomfields.com/resources/tutorials/creating-a-new-field-type/
-
-### step 3.
-
-Edit this `README.md` file with the appropriate information and delete all content above and including the following line.
+Allows you to create relationships to posts from WP Rest API Endpoints. 
 
 -----------------------
 
-# ACF FIELD_LABEL Field
-
-SHORT_DESCRIPTION
-
------------------------
-
-### Description
-
-EXTENDED_DESCRIPTION
 
 ### Compatibility
 
 This ACF field type is compatible with:
 * ACF 5
-* ACF 4
 
-### Installation
 
-1. Copy the `acf-FIELD_NAME` folder into your `wp-content/plugins` folder
-2. Activate the FIELD_LABEL plugin via the plugins admin page
-3. Create a new field via ACF and select the FIELD_LABEL type
-4. Please refer to the description for more info regarding the field type settings
+### Installation / Use
 
-### Changelog
-Please see `readme.txt` for changelog
+1. Copy the `acf-api-fields` folder into your `wp-content/plugins` folder
+2. Activate Advanced Custom Fields: API Fields plugin via the plugins admin page
+3. Create a new field via ACF and select the API Relationship type
+4. Enter in the endpoint to the remote API.   Example   http://example.com/wp-json/v2/wp/posts
+5. Edit the object where you have included the field group.  You'll see a standard Relationship field, however the data will be populated from the remote API. 
+
+
+The field type returns objects from get_field().   Example template file use:
+
+
+`
+<?php $remote_posts = get_field( 'remote_post_object' ); ?>
+<?php if ( !empty( $remote_posts ) ): ?>
+
+	<?php foreach ( $remote_posts as $remote_post ): ?>
+
+		<h2><?php echo esc_html( $remote_post->get_title() ); ?></h2>
+                <p><?php echo $remote_post->content->rendered; ?></p>
+
+	<?php endforeach; ?>
+
+<?php endif; ?>
+
+`
+
+The object which is returned from the API is similar to the object from the [Example Client Library](https://github.com/WP-API/client-php/blob/master/library/WPAPI/Post.php)
