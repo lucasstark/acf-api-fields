@@ -10,6 +10,15 @@ Allows you to create relationships to posts from WP Rest API Endpoints.
 This ACF field type is compatible with:
 * ACF 5
 
+### Screenshots ###
+Field Settings:
+![Field Settings](/docs/field-group.png?raw=true "Field Settings")
+
+When editing an object with the field:
+![Post Editor](/docs/post-editor.png?raw=true "Post Editor")
+
+Example output:
+![Example Output](/docs/example-output.png?raw=true "Example Output")
 
 ### Installation / Use
 
