@@ -2,7 +2,7 @@
 
 /*
   Plugin Name: Advanced Custom Fields: API Fields
-  Plugin URI: http://www.github.com/lucasstark/acf-wp-rest-api-fields/
+  Plugin URI: https://github.com/lucasstark/acf-api-fields
   Description: WP Rest API Object and Relationship Fields
   Version: 0.0.1
   Author: Lucas Stark
