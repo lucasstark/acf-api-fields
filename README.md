@@ -23,7 +23,7 @@ This ACF field type is compatible with:
 The field type returns objects from get_field().   Example template file use:
 
 
-`
+```
 
 <?php $remote_posts = get_field( 'remote_post_object' ); ?>
 <?php if ( !empty( $remote_posts ) ): ?>
@@ -38,6 +38,6 @@ The field type returns objects from get_field().   Example template file use:
 <?php endif; ?>
 
 
-`
+```
 
 The object which is returned from the API is similar to the object from the [Example Client Library](https://github.com/WP-API/client-php/blob/master/library/WPAPI/Post.php)
