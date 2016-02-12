@@ -24,6 +24,7 @@ The field type returns objects from get_field().   Example template file use:
 
 
 `
+
 <?php $remote_posts = get_field( 'remote_post_object' ); ?>
 <?php if ( !empty( $remote_posts ) ): ?>
 
@@ -35,6 +36,7 @@ The field type returns objects from get_field().   Example template file use:
 	<?php endforeach; ?>
 
 <?php endif; ?>
+
 
 `
 
