@@ -37,8 +37,7 @@
 
 			// ready for ajax
 			var ajax_data = acf.prepare_for_ajax(this.o);
-			
-			
+
 			// clear html if is new query
 			if (ajax_data.paged == 1) {
 				this.$choices.children('.list').html('')
@@ -51,7 +50,7 @@
 			
 			// get results
 			var xhr = $.ajax({
-				url: ajax_data.endpoint,
+				url: this.o.api,
 				dataType: 'json',
 				type: 'post',
 				method: 'GET',

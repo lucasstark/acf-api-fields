@@ -4,7 +4,7 @@
   Plugin Name: Advanced Custom Fields: API Fields
   Plugin URI: https://github.com/lucasstark/acf-api-fields
   Description: WP Rest API Object and Relationship Fields
-  Version: 0.0.2
+  Version: 0.0.1
   Author: Lucas Stark
   Author URI: http://www.github.com/lucasstark/
   License: GPLv2 or later
@@ -25,6 +25,8 @@ class ACF_API_Fields_Main {
 		}
 	}
 
+	
+
 	/**
 	 * 
 	 * @return ACF_API_Fields_Main
@@ -33,6 +35,7 @@ class ACF_API_Fields_Main {
 		self::register();
 		return self::$instance;
 	}
+	
 	
 	/**
 	 * Version string for JS and CSS. 
@@ -72,7 +75,12 @@ class ACF_API_Fields_Main {
 	 * @return string
 	 */
 	public function assets_version() {
-		return $this->_assets_version;
+		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
+			//return time();
+			return $this->_assets_version;
+		} else {
+			return $this->_assets_version;
+		}
 	}
 
 	public function plugin_url() {
