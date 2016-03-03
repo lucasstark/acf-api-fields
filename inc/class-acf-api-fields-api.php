@@ -24,19 +24,25 @@ class ACF_API_Fields_API {
 		}
 
 		$json_response = wp_remote_retrieve_body( $response );
-		
-		if (empty($json_response)){
+
+		if ( empty( $json_response ) ) {
 			return array();
 		}
-		
-		
+
+
 		$results = array();
 		$data = json_decode( $json_response );
-		
-		foreach($data as $post_data){
-			$results[] = new ACF_API_Fields_Model_Post($api_endpoint_url, $post_data);
+
+		foreach ( $data as $post_data ) {
+			
+			$model = apply_filters( 'acf_api_fields_get_api_model', false, $post_data, $field, $args );
+			if ( !empty( $model ) ) {
+				$results[] = $model;
+			} else {
+				$results[] = new ACF_API_Fields_Model_Post( $api_endpoint_url, $post_data );
+			}
 		}
-		
+
 		return $results;
 	}
 

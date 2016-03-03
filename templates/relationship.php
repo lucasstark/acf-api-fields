@@ -173,7 +173,7 @@ if ( $width['taxonomy'] ) {
 							?><li>
 								<input type="hidden" name="<?php echo $field['name']; ?>[]" value="<?php echo esc_attr($remote_post->id); ?>" />
 								<span data-id="<?php echo esc_attr($remote_post->id); ?>" class="acf-rel-item">
-									<?php echo esc_html($remote_post->title->rendered); ?>
+									<?php echo esc_html( $remote_post->title ); ?>
 									<a href="#" class="acf-icon -minus small dark" data-name="remove_item"></a>
 								</span>
 							</li><?php

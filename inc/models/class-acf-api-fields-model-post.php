@@ -1,7 +1,8 @@
 <?php
 class ACF_API_Fields_Model_Post {
 	protected $api_endpoint_url;
-
+	
+	public $title = '';
 	/**
 	 * Data container
 	 *
@@ -24,6 +25,9 @@ class ACF_API_Fields_Model_Post {
 	public function __construct( $api_endpoint_url, $data = array() ) {
 		$this->api = $api_endpoint_url;
 		$this->data = (array) $data;
+		
+		//Setup the title so it can be used inside of the releationship field. 
+		$this->title = $this->get_title();
 	}
 
 	public function get_title() {
