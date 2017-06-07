@@ -88,7 +88,9 @@
 
 			});
 			// return
-			return data;
+			return {
+				results: data
+			};
 		}
 	});
 })(jQuery);
