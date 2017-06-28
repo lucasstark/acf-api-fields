@@ -12,10 +12,9 @@
 
 			// get options
 			this.o = acf.get_data(this.$el);
-
+console.log(this.o);
 		},
 		fetch: function () {
-			console.log('Fetching...');
 
 			// reference
 			var self = this;
@@ -46,20 +45,21 @@
 
 			// add message
 			this.$choices.find('ul:last').append('<p><i class="acf-loading"></i> ' + acf._e('relationship', 'loading') + '</p>');
-				
+
+			var apiData = {
+                order:'asc',
+                orderby: this.o.api_endpoint_title_field,
+                search: ajax_data.s,
+                page: ajax_data.paged
+            };
 			
 			// get results
 			var xhr = $.ajax({
-				url: this.o.api,
+				url: this.o.api_endpoint,
 				dataType: 'json',
 				type: 'post',
 				method: 'GET',
-				data: {
-					order:'asc',
-					orderby:'title',
-					search: ajax_data.s,
-					page: ajax_data.paged
-				},
+				data: apiData,
 				success: function (json) {
 					// render
 					self.doFocus($field);

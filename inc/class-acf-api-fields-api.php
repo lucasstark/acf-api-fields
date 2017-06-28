@@ -12,6 +12,18 @@ class ACF_API_Fields_API {
 	public function get_posts( $field, $args ) {
 
 		$args['per_page'] = 100;
+
+		if ( strpos( $field['api_endpoint_url'], 'http' ) !== 0 ) {
+			$field['api_endpoint_url'] = untrailingslashit( get_site_url( 1 ) ) . '/' . ltrim( $field['api_endpoint_url'], '/' );
+		}
+
+		$include = array();
+		if ( isset( $args['include'] ) && is_array( $args['include'] ) ) {
+			$include = $args['include'];
+
+			$args['include'] = implode( ',', $args['include'] );
+		}
+
 		$api_endpoint_url = add_query_arg( $args, $field['api_endpoint_url'] );
 		$response         = wp_remote_get( $api_endpoint_url, array( 'timeout' => 20 ) );
 
@@ -39,7 +51,7 @@ class ACF_API_Fields_API {
 
 
 		$results = array();
-		foreach ( $args['include'] as $id ) {
+		foreach ( $include as $id ) {
 			$results[ $id ] = null;
 		}
 
@@ -51,11 +63,12 @@ class ACF_API_Fields_API {
 			if ( ! empty( $model ) ) {
 				$results[ $post_data->id ] = $model;
 			} else {
-				$results[ $post_data->id ] = new ACF_API_Fields_Model_Post( $api_endpoint_url, $post_data );
+				$model = new ACF_API_Fields_Model_Post( $api_endpoint_url, $post_data );
+				$results[ $model->get_id() ] = $model;
 			}
 		}
 
-		return $results;
+		return array_filter( $results );
 	}
 
 }

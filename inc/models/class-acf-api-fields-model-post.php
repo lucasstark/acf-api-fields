@@ -1,7 +1,10 @@
 <?php
+
 class ACF_API_Fields_Model_Post {
 	protected $api_endpoint_url;
-	
+
+	public $id = '';
+
 	public $title = '';
 	/**
 	 * Data container
@@ -23,37 +26,54 @@ class ACF_API_Fields_Model_Post {
 	 * @param array $data Data to initialise the object with
 	 */
 	public function __construct( $api_endpoint_url, $data = array() ) {
-		$this->api = $api_endpoint_url;
+		$this->api  = $api_endpoint_url;
 		$this->data = (array) $data;
-		
-		//Setup the title so it can be used inside of the releationship field. 
+
+		//Setup the fields so it can be used inside of the releationship field.
+		$this->id = $this->get_id();
 		$this->title = $this->get_title();
 	}
 
+	public function get_id() {
+		if ( isset( $this->data['ID'] ) ) {
+			return $this->data['ID'];
+		} elseif ( isset( $this->data['id'] ) ) {
+			return $this->data['id'];
+		} elseif ( isset( $this->data['term_id'] ) ) {
+			return $this->data['term_id'];
+		} else {
+			return false;
+		}
+	}
+
 	public function get_title() {
-		if (isset($this->data['title'])){
-			if (isset($this->data['title']->rendered)) {
+		if ( isset( $this->data['title'] ) ) {
+			if ( isset( $this->data['title']->rendered ) ) {
 				return $this->data['title']->rendered;
 			}
+		} elseif ( isset( $this->data['name'] ) ) {
+			return $this->data['name'];
 		}
-		
+
 		return '';
 	}
-	
-	
+
+
 	/**
 	 * Get a property
 	 *
 	 * See the specification for data keys/values returned by the API.
 	 *
 	 * @param string $key Key to retrieve
+	 *
 	 * @return mixed Post value for the key
 	 */
 	public function __get( $key ) {
-		if ( !isset( $this->data[$key] ) ) {
+		if ( ! isset( $this->data[ $key ] ) ) {
 			return null;
 		}
-		return $this->data[$key];
+
+		return $this->data[ $key ];
 	}
 
 	/**
@@ -63,8 +83,8 @@ class ACF_API_Fields_Model_Post {
 	 * @param mixed $value Value for the key
 	 */
 	public function __set( $key, $value ) {
-		$this->data[$key] = $value;
-		$this->changed[$key] = true;
+		$this->data[ $key ]    = $value;
+		$this->changed[ $key ] = true;
 	}
 
 	/**
@@ -77,7 +97,6 @@ class ACF_API_Fields_Model_Post {
 	public function getRawData() {
 		return $this->data;
 	}
-	
-	
-	
+
+
 }

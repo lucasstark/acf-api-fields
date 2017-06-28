@@ -42,9 +42,34 @@ class ACF_API_Fields_Field_Relationship extends acf_field {
 		acf_render_field_setting( $field, array(
 		    'label' => __( 'End Point URL', 'acf-wp-rest-api-fields' ),
 		    'instructions' => __( 'The API Endpoint URL', 'acf-wp-rest-api-fields' ),
-		    'type' => 'url',
+		    'type' => 'text',
 		    'name' => 'api_endpoint_url',
-		    'append' => '/',
+		    'append' => '',
+		) );
+
+		acf_render_field_setting( $field, array(
+			'label' => __( 'End Point Type', 'acf-wp-rest-api-fields' ),
+			'instructions' => __( 'The API Endpoint Type', 'acf-wp-rest-api-fields' ),
+			'type' => 'select',
+			'choices' => array(
+				'post' => 'Post Type',
+				'taxonomy' => 'Taxonomy'
+			),
+			'name' => 'api_endpoint_type',
+		) );
+
+		acf_render_field_setting( $field, array(
+			'label' => __( 'End Point ID Field', 'acf-wp-rest-api-fields' ),
+			'instructions' => __( 'The API Endpoint ID Field', 'acf-wp-rest-api-fields' ),
+			'type' => 'text',
+			'name' => 'api_id_field',
+		) );
+
+		acf_render_field_setting( $field, array(
+			'label' => __( 'End Point Title Field', 'acf-wp-rest-api-fields' ),
+			'instructions' => __( 'The API Endpoint Title Field', 'acf-wp-rest-api-fields' ),
+			'type' => 'text',
+			'name' => 'api_title_field',
 		) );
 	}
 
@@ -59,7 +84,10 @@ class ACF_API_Fields_Field_Relationship extends acf_field {
 		    'data-post_type' => '',
 		    'data-taxonomy' => '',
 		    'data-paged' => 1,
-		    'data-api' => $field['api_endpoint_url']
+		    'data-api_endpoint' => $field['api_endpoint_url'],
+			'data-api_endpoint_type' => $field['api_endpoint_type'],
+		    'data-api_endpoint_id_field' => $field['api_id_field'],
+			'data-api_endpoint_title_field' => $field['api_title_field']
 		);
 
 		include ACF_API_Fields()->plugin_dir() . '/templates/relationship.php';
